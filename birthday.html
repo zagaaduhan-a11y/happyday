@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD, Enkhuun! ✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --main-pink: #ff4d94; --gold: #ffd700; }
+        body {
+            margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background: #fff0f6; font-family: 'Arial', sans-serif; overflow: hidden;
+        }
+
+        /* Зургийн оронд орох хөдөлгөөнтэй төрсөн өдрийн эмблэм */
+        .celebration-icon {
+            width: 150px; height: 150px; background: white; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 80px; margin: 0 auto 20px;
+            box-shadow: 0 10px 25px rgba(255, 77, 148, 0.2);
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        .container {
+            text-align: center; background: white; padding: 40px 25px; border-radius: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); max-width: 350px; width: 90%;
+            position: relative; z-index: 2; border: 3px solid var(--main-pink);
+        }
+
+        .title { 
+            color: var(--main-pink); font-size: 26px; font-weight: 900; 
+            margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .sub-title { color: #999; font-size: 14px; margin-bottom: 25px; }
+
+        /* Мэндчилгээний карт */
+        .msg-display {
+            background: #fff9fb; color: #d81b60; padding: 25px; border-radius: 20px;
+            font-weight: bold; min-height: 80px; display: flex; align-items: center; 
+            justify-content: center; border: 2px solid #ffc1e3; margin-bottom: 20px;
+            font-size: 18px; line-height: 1.5;
+        }
+
+        .btn {
+            background: var(--main-pink); color: white; border: none; padding: 18px;
+            border-radius: 50px; width: 100%; font-weight: bold; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 77, 148, 0.4); font-size: 16px; transition: 0.3s;
+        }
+        .btn:active { transform: scale(0.9); }
+
+        /* Од нисгэх эффект */
+        .sparkle {
+            position: absolute; width: 10px; height: 10px; background: var(--gold);
+            border-radius: 50%; pointer-events: none;
+        }
+    </style>
+</head>
+<body onclick="createSparkle(event)">
+
+    <div class="container">
+        <div class="celebration-icon" id="emoji">🎂</div>
+
+        <div class="title">Happy Birthday!</div>
+        <div class="sub-title">To my bestie Энхүүн ✨</div>
+        
+        <div class="msg-display" id="quote">
+            "Энд дарж гэнэтийн бэлгээ нээгээрэй..."
+        </div>
+
+        <button class="btn" onclick="nextAction()">МЭНДЧИЛГЭЭ УНШИХ 🎁</button>
+        
+        <p style="margin-top: 15px; font-size: 12px; color: #ff85a2; font-weight: bold;" id="count">0 / 20</p>
+    </div>
+
+    <script>
+        const msgs = [
+            "Энэ өдрийн мэнд, Энхүүн! 🎉", "Миний хамгийн cool найз! 😎",
+            "Дэлхийн хамгийн хөөрхөн нь! ✨", "Бүх мөрөөдөл нь биелэг! ✨",
+            "Үргэлж ийм эрч хүчтэй байгаарай! 🔥", "Чи бол шилдэг нь! 👊",
+            "Чам шиг найзтайдаа баярладаг! 🙌", "Энхүүн бол Real Bestie! 🤞",
+            "Солиотой гоё баярлаарай! 🥳", "Хайртай найз минь шүү! ❤️",
+            "Урт насалж, удаан жаргаарай! 🎂", "Амжилт бүтээлээр дүүрэн байг! 🌟",
+            "Ирэх жил нь бүх зүйл чинийх! 👑", "Never stop shining! ✨",
+            "Чи бол миний амьдралын тод өнгө! 🌈", "Хамгийн жаргалтай нь байгаарай! 💎",
+            "Зөндөө олон дурсамж бүтээе! 📸", "Stay special, stay you! 🌸",
+            "За ингээд дахиад нэг удаа... 🎉", "ТӨРСӨН ӨДРИЙН МЭНД!!! ✨"
+        ];
+
+        const emojis = ["🎂", "🥳", "🎁", "✨", "🌸", "👑", "💖", "🥂"];
+        let i = 0;
+
+        function nextAction() {
+            // Мэндчилгээ солих
+            const q = document.getElementById('quote');
+            q.innerText = msgs[i];
+            
+            // Emoji солих
+            const em = document.getElementById('emoji');
+            em.innerText = emojis[i % emojis.length];
+
+            i = (i + 1) % msgs.length;
+            document.getElementById('count').innerText = i + " / " + msgs.length;
+            
+            // Confetti асгах
+            confetti({ 
+                particleCount: 150, spread: 80, origin: { y: 0.6 },
+                colors: ['#ff4d94', '#ffd700', '#ffffff'] 
+            });
+        }
+
+        // Дэлгэц дээр дарахад гялалзах эффект
+        function createSparkle(e) {
+            for(let j=0; j<5; j++) {
+                confetti({
+                    particleCount: 5, startVelocity: 15, spread: 360,
+                    origin: { x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight },
+                    colors: ['#ff4d94', '#ffd700']
+                });
+            }
+        }
+    </script>
+</body>
+</html>
